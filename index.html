@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Morgan | Senior Visual Designer</title>
+    
+    <!-- Fonts: Inter for that clean, Apple-esque UI look -->
+    <link rel="preconnect" href="https://Afonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config for specific design tokens -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0a0a0a', // Deep charcoal black
+                        secondary: '#1a1a1a',
+                        accent: '#3b82f6', // Electric Blue
+                        'accent-soft': '#60a5fa',
+                        cream: '#f5f5f5',
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Cursor Styling */
+        body {
+            cursor: none;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Hover states for cursor */
+        body:hover .cursor-outline.hovered {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: transparent;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Hide cursor on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .cursor-dot, .cursor-outline { display: none; }
+            body { cursor: auto; }
+        }
+
+        /* Noise Texture for premium feel */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.07;
+        }
+
+        /* Scroll Animation Utilities */
+        .reveal-text {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+        
+        .char {
+            transform: translateY(115%);
+            transition: transform 0.5s cubic-bezier(0.5, 0, 0.5, 1);
+        }
+        
+        .reveal-visible .char {
+            transform: translateY(0);
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Image Hover Effect */
+        .project-card:hover .project-img {
+            transform: scale(1.05);
+        }
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        /* Gradient Mesh Background */
+        .gradient-mesh {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Background Gradients -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
+        <div class="gradient-mesh top-[-20%] left-[-10%] animate-float"></div>
+        <div class="gradient-mesh bottom-[-20%] right-[-10%] bg-purple-900/20 animate-float" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-40 px-6 py-6 md:px-12 flex justify-between items-center mix-blend-difference text-white">
+        <a href="#" class="text-xl font-bold tracking-tighter hover-trigger" data-hover-text="Home">ALEX MORGAN®</a>
+        
+        <div class="hidden md:flex gap-8 text-sm font-medium tracking-wide uppercase">
+            <a href="#work" class="hover:text-gray-400 transition-colors hover-trigger">Work</a>
+            <a href="#expertise" class="hover:text-gray-400 transition-colors hover-trigger">Expertise</a>
+            <a href="#about" class="hover:text-gray-400 transition-colors hover-trigger">About</a>
+        </div>
+
+        <a href="#contact" class="hidden md:block px-6 py-2 border border-white/20 rounded-full text-sm hover:bg-white hover:text-black transition-all duration-300 hover-trigger">
+            Let's Talk
+        </a>
+
+        <!-- Mobile Menu Icon -->
+        <button class="md:hidden hover-trigger">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col justify-center px-6 md:px-12 relative pt-20">
+        <div class="max-w-6xl w-full mx-auto">
+            <div class="overflow-hidden mb-2">
+                <p class="text-sm md:text-base text-gray-400 uppercase tracking-[0.2em] fade-up delay-100">Senior Graphic Designer</p>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-9xl font-bold leading-[0.9] tracking-tighter mb-8 mix-blend-difference">
+                <span class="block overflow-hidden"><span class="block fade-up delay-200">Crafting premium</span></span>
+                <span class="block overflow-hidden"><span class="block fade-up delay-300 text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500">digital utility</span></span>
+                <span class="block overflow-hidden"><span class="block fade-up delay-400">& brand experiences.</span></span>
+            </h1>
+
+            <div class="flex flex-col md:flex-row md:items-end justify-between mt-12 md:mt-24 border-t border-white/10 pt-8 fade-up delay-500">
+                <div class="max-w-lg mb-8 md:mb-0">
+                    <p class="text-gray-400 text-lg md:text-xl font-light leading-relaxed">
+                        Helping forward-thinking companies build clarity and visual authority through strategic branding, UI/UX, and motion design.
+                    </p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="#work" class="group flex items-center gap-2 text-white hover:text-gray-300 transition-colors hover-trigger">
+                        <span class="border-b border-white pb-1 group-hover:border-gray-300">View Selected Works</span>
+                        <i data-lucide="arrow-down-right" class="w-4 h-4 group-hover:rotate-45 transition-transform duration-300"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Selected Works Section -->
+    <section id="work" class="py-24 md:py-32 px-6 md:px-12 bg-black/50 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-baseline mb-16 md:mb-24 fade-up">
+                <h2 class="text-4xl md:text-6xl font-bold tracking-tighter">Selected Works</h2>
+                <span class="text-gray-500 hidden md:inline">(2020 — 2024)</span>
+            </div>
+
+            <!-- Project Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16 md:gap-y-32">
+                
+                <!-- Project 1 -->
+                <div class="group project-card cursor-pointer hover-trigger fade-up">
+                    <div class="relative overflow-hidden aspect-[4/3] mb-6 rounded-sm bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop" alt="Project 1" class="project-img object-cover w-full h-full transition-transform duration-700 ease-out grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                        <div class="project-overlay opacity-0 absolute inset-0 flex items-center justify-center transition-opacity duration-300">
+                            <span class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-full text-sm uppercase tracking-widest border border-white/20">View Case Study</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start border-t border-white/10 pt-4">
+                        <div>
+                            <h3 class="text-2xl md:text-3xl font-medium mb-1 group-hover:text-blue-400 transition-colors">Aether Finance</h3>
+                            <p class="text-gray-400 text-sm">Fintech Branding & UI Design</p>
+                        </div>
+                        <span class="text-gray-600 text-xs border border-gray-800 px-2 py-1 rounded">2023</span>
+                    </div>
+                </div>
+
+                <!-- Project 2 (Offset) -->
+                <div class="group project-card cursor-pointer md:mt-24 hover-trigger fade-up">
+                    <div class="relative overflow-hidden aspect-[4/3] mb-6 rounded-sm bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop" alt="Project 2" class="project-img object-cover w-full h-full transition-transform duration-700 ease-out grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100">
+                         <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                         <div class="project-overlay opacity-0 absolute inset-0 flex items-center justify-center transition-opacity duration-300">
+                            <span class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-full text-sm uppercase tracking-widest border border-white/20">View Case Study</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start border-t border-white/10 pt-4">
+                        <div>
+                            <h3 class="text-2xl md:text-3xl font-medium mb-1 group-hover:text-blue-400 transition-colors">Lumina Spaces</h3>
+                            <p class="text-gray-400 text-sm">Architectural Visualization & Web</p>
+                        </div>
+                        <span class="text-gray-600 text-xs border border-gray-800 px-2 py-1 rounded">2024</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="group project-card cursor-pointer hover-trigger fade-up">
+                    <div class="relative overflow-hidden aspect-[4/3] mb-6 rounded-sm bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop" alt="Project 3" class="project-img object-cover w-full h-full transition-transform duration-700 ease-out grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100">
+                         <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                         <div class="project-overlay opacity-0 absolute inset-0 flex items-center justify-center transition-opacity duration-300">
+                            <span class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-full text-sm uppercase tracking-widest border border-white/20">View Case Study</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start border-t border-white/10 pt-4">
+                        <div>
+                            <h3 class="text-2xl md:text-3xl font-medium mb-1 group-hover:text-blue-400 transition-colors">Nexus AI</h3>
+                            <p class="text-gray-400 text-sm">Product Design System</p>
+                        </div>
+                        <span class="text-gray-600 text-xs border border-gray-800 px-2 py-1 rounded">2022</span>
+                    </div>
+                </div>
+
+                 <!-- Project 4 -->
+                 <div class="group project-card cursor-pointer md:mt-24 hover-trigger fade-up">
+                    <div class="relative overflow-hidden aspect-[4/3] mb-6 rounded-sm bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2000&auto=format&fit=crop" alt="Project 4" class="project-img object-cover w-full h-full transition-transform duration-700 ease-out grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100">
+                         <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                         <div class="project-overlay opacity-0 absolute inset-0 flex items-center justify-center transition-opacity duration-300">
+                            <span class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-full text-sm uppercase tracking-widest border border-white/20">View Case Study</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start border-t border-white/10 pt-4">
+                        <div>
+                            <h3 class="text-2xl md:text-3xl font-medium mb-1 group-hover:text-blue-400 transition-colors">Carbon Magazine</h3>
+                            <p class="text-gray-400 text-sm">Editorial & Print Design</p>
+                        </div>
+                        <span class="text-gray-600 text-xs border border-gray-800 px-2 py-1 rounded">2023</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-24 text-center">
+                <a href="#" class="inline-block px-10 py-4 border border-white/30 rounded-full text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 hover-trigger">All Projects Archive</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertise Section -->
+    <section id="expertise" class="py-24 px-6 md:px-12 border-t border-white/5">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24">
+            <div class="md:w-1/3 fade-up">
+                <h2 class="text-lg text-gray-400 uppercase tracking-widest mb-4">My Toolkit</h2>
+                <p class="text-2xl font-light text-white leading-relaxed">
+                    Combining traditional graphic design principles with modern digital tools to create future-proof solutions.
+                </p>
+            </div>
+            <div class="md:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-y-12 gap-x-8">
+                <div class="fade-up delay-100">
+                    <h3 class="text-white font-bold mb-4 flex items-center gap-2"><i data-lucide="pen-tool" class="w-4 h-4 text-blue-500"></i> Design</h3>
+                    <ul class="space-y-2 text-gray-400 font-light">
+                        <li>Figma</li>
+                        <li>Adobe Creative Suite</li>
+                        <li>Sketch</li>
+                        <li>Protopie</li>
+                    </ul>
+                </div>
+                <div class="fade-up delay-200">
+                    <h3 class="text-white font-bold mb-4 flex items-center gap-2"><i data-lucide="box" class="w-4 h-4 text-purple-500"></i> 3D & Motion</h3>
+                    <ul class="space-y-2 text-gray-400 font-light">
+                        <li>Blender 3D</li>
+                        <li>Cinema 4D</li>
+                        <li>After Effects</li>
+                        <li>Spline</li>
+                    </ul>
+                </div>
+                <div class="fade-up delay-300">
+                    <h3 class="text-white font-bold mb-4 flex items-center gap-2"><i data-lucide="code" class="w-4 h-4 text-green-500"></i> Development</h3>
+                    <ul class="space-y-2 text-gray-400 font-light">
+                        <li>Webflow</li>
+                        <li>HTML/CSS</li>
+                        <li>Framer</li>
+                        <li>Basic React</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 md:py-32 px-6 md:px-12 bg-[#0d0d0d]">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center gap-16 md:gap-24">
+                <div class="w-full md:w-5/12 relative fade-up">
+                    <div class="aspect-[3/4] overflow-hidden rounded-sm relative">
+                        <!-- Placeholder Portrait -->
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop" alt="Alex Morgan" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                        <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/80 to-transparent">
+                            <p class="text-white font-medium">Alex Morgan</p>
+                            <p class="text-gray-400 text-sm">Based in Berlin, Germany</p>
+                        </div>
+                    </div>
+                    <!-- Decorative element -->
+                    <div class="absolute -z-10 top-10 -right-10 w-full h-full border border-white/10 hidden md:block"></div>
+                </div>
+
+                <div class="w-full md:w-7/12 fade-up delay-100">
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-8">
+                        Design is intelligence <br> made visible.
+                    </h2>
+                    <div class="space-y-6 text-gray-400 text-lg font-light leading-relaxed">
+                        <p>
+                            With over 5 years of experience in the digital space, I've had the privilege of working with ambitious startups and established global brands. My approach is rooted in strategy—I don't just make things look good; I make them work.
+                        </p>
+                        <p>
+                            I believe in the power of minimalism. By stripping away the unnecessary, we uncover the essence of a brand, creating experiences that are not only beautiful but intuitive and impactful.
+                        </p>
+                    </div>
+
+                    <div class="mt-12 grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
+                        <div>
+                            <span class="block text-4xl font-bold text-white mb-1">50+</span>
+                            <span class="text-sm text-gray-500 uppercase tracking-widest">Projects Delivered</span>
+                        </div>
+                        <div>
+                            <span class="block text-4xl font-bold text-white mb-1">12</span>
+                            <span class="text-sm text-gray-500 uppercase tracking-widest">Industry Awards</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 md:py-32 px-6 md:px-12 relative overflow-hidden">
+        <!-- Abstract shape -->
+        <div class="absolute right-[-10%] bottom-[-20%] w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <p class="text-blue-400 uppercase tracking-widest text-sm mb-4 fade-up">Get in Touch</p>
+            <h2 class="text-5xl md:text-8xl font-bold tracking-tighter mb-12 fade-up delay-100">
+                Let's create something <br> extraordinary.
+            </h2>
+            
+            <a href="mailto:hello@alexmorgan.design" class="inline-block text-2xl md:text-4xl text-gray-300 border-b border-gray-600 pb-2 hover:text-white hover:border-white transition-all duration-300 hover-trigger mb-16 fade-up delay-200">
+                hello@alexmorgan.design
+            </a>
+
+            <!-- Minimal Form -->
+            <form class="max-w-xl mx-auto text-left space-y-8 fade-up delay-300">
+                <div class="group">
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2 group-focus-within:text-blue-400 transition-colors">Your Name</label>
+                    <input type="text" class="w-full bg-transparent border-b border-gray-700 py-3 text-white focus:outline-none focus:border-blue-400 transition-colors" placeholder="John Doe">
+                </div>
+                <div class="group">
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2 group-focus-within:text-blue-400 transition-colors">Your Email</label>
+                    <input type="email" class="w-full bg-transparent border-b border-gray-700 py-3 text-white focus:outline-none focus:border-blue-400 transition-colors" placeholder="john@example.com">
+                </div>
+                <div class="group">
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2 group-focus-within:text-blue-400 transition-colors">Project Details</label>
+                    <textarea rows="4" class="w-full bg-transparent border-b border-gray-700 py-3 text-white focus:outline-none focus:border-blue-400 transition-colors resize-none" placeholder="Tell me about your vision..."></textarea>
+                </div>
+                <button type="submit" class="w-full py-4 bg-white text-black font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors mt-8 hover-trigger">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 md:px-12 border-t border-white/5 bg-black text-gray-500 text-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <span class="font-bold text-white tracking-tight">ALEX MORGAN®</span>
+                <span class="ml-2">© 2025</span>
+            </div>
+            
+            <div class="flex gap-8">
+                <a href="#" class="hover:text-white transition-colors hover-trigger">LinkedIn</a>
+                <a href="#" class="hover:text-white transition-colors hover-trigger">Behance</a>
+                <a href="#" class="hover:text-white transition-colors hover-trigger">Instagram</a>
+                <a href="#" class="hover:text-white transition-colors hover-trigger">Dribbble</a>
+            </div>
+
+            <div class="text-xs text-gray-600">
+                Designed & Built with precision.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Custom Cursor Logic
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        
+        // Mouse Move Event
+        window.addEventListener('mousemove', function(e) {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            // Dot follows instantly
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Outline follows with slight delay (animation handled by CSS transition)
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Hover States
+        const hoverTriggers = document.querySelectorAll('.hover-trigger');
+        hoverTriggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => {
+                cursorOutline.classList.add('hovered');
+            });
+            trigger.addEventListener('mouseleave', () => {
+                cursorOutline.classList.remove('hovered');
+            });
+        });
+
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Optional: Stop observing once visible
+                    // observer.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        const fadeElements = document.querySelectorAll('.fade-up');
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Smooth Scroll for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
